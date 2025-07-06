@@ -1,0 +1,81 @@
+/* -*- Mode: Javascript; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+{
+    "component-manager": {
+        "components":
+        [
+            {
+                "shared-library": "sawJoystick",
+                "class-name": "mtsJoystick",
+                "constructor-arg": {
+                    "Name": "joystick"
+                },
+                "configure-parameter": "misc/sawJoystickConfiguration.json"
+            },
+            
+            {
+                "shared-library": "sawForceDimensionSDK",
+                "class-name": "mtsForceDimension",
+                "constructor-arg": {
+                    "Name": "ForceDimensionSDK"
+                },
+                "configure-parameter": "omega7-11528.json"
+            }
+        ]
+    }
+    ,
+    "console-inputs":
+    {
+        "operator-present": {
+            "component": "joystick",
+            "interface": "OperatorPresent"
+        }
+        ,
+        "clutch": {
+            "component": "joystick",
+            "interface": "Clutch"
+        }
+    }
+    ,
+    "io":
+    {
+        "firewire-protocol": "broadcast-read-write"
+    }
+    ,
+    "arms":
+    [
+        {
+            "name": "MTML",  // created previously using custom components
+            "type": "MTM_GENERIC",
+            "component": "ForceDimensionSDK",
+            "interface": "MTML"
+        }
+        ,
+        {
+            "name": "PSM2",
+            "type": "PSM",
+            "serial": "527924",
+            "base-frame": {
+                "reference-frame": "FD",
+                "transform": [[  0.0,  -1.0,          0.0,          -0.0],
+                              [  1.0, 0.0,  0.0,          0.0 ],
+                              [  0.0, -0,         1,  0.0 ],
+                              [  0.0,  0.0,          0.0,          1.0 ]] }
+        }
+    ]
+    ,
+    "psm-teleops":
+    [
+        {
+            "mtm": "MTML",
+            "psm": "PSM2",
+            "configure-parameter": {
+                "ignore-jaw": false,
+                "gripper-scaling": {
+                   "max": 0.49,
+                   "zero": -0.1
+                },
+                "scale": 0.4
+            }
+        }
+    ]
+}
